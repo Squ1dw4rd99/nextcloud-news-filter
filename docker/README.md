@@ -99,10 +99,10 @@ The script logs its output to `nextcloud-news-filter.log` within the container.
 ## Building the image
 
 To build the image yourself, you need the following files:
-- [Dockerfile](https://github.com/Squ1dw4rd99/nextcloud-news-filter/)
-- [create_config.sh](https://github.com/Squ1dw4rd99/nextcloud-news-filter/)
-- [setup_cron.sh](https://github.com/Squ1dw4rd99/nextcloud-news-filter/)
-- [main.py](https://github.com/Squ1dw4rd99/nextcloud-news-filter/)
+- [Dockerfile](https://github.com/Squ1dw4rd99/nextcloud-news-filter/blob/36a1e30e2cc5c8d40e38fbccc9052e4c4ba5f719/docker/Dockerfile)
+- [create_config.sh](https://github.com/Squ1dw4rd99/nextcloud-news-filter/blob/36a1e30e2cc5c8d40e38fbccc9052e4c4ba5f719/docker/create_config.sh)
+- [setup_cron.sh](https://github.com/Squ1dw4rd99/nextcloud-news-filter/blob/36a1e30e2cc5c8d40e38fbccc9052e4c4ba5f719/docker/setup_cron.sh)
+- [main.py](https://github.com/Squ1dw4rd99/nextcloud-news-filter/blob/36a1e30e2cc5c8d40e38fbccc9052e4c4ba5f719/main.py)
 
 ## Contact information
 if you wish to contact me, write an [email](mailto:squ1dw4rd.t3nt4cl3s@proton.me)
