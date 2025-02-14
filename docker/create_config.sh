@@ -1,5 +1,6 @@
 #!/bin/bash
-# create_config.sh v1.4
+# create_config.sh v1.5
+# This script generates the config.ini file for the Nextcloud News Filter
 
 # Exit if required environment variables are not set
 if [[ -z "$NEXTCLOUD_ADDRESS" || -z "$NEXTCLOUD_USERNAME" || -z "$NEXTCLOUD_PASSWORD" ]]; then
@@ -42,32 +43,42 @@ EOF
     fi
 }
 
-# Loop through environment variables to find custom filters
+# Collect filters in an array
+filters=()
 for var in $(env); do
     if [[ $var == FILTER_* ]]; then
-        filter_number=$(echo "$var" | cut -d'_' -f2)
-        filter_property=$(echo "$var" | cut -d'_' -f3)
-        filter_name=$(echo "$filter_property" | cut -d'=' -f1 | tr '[:upper:]' '[:lower:]') # Convert to lowercase
-        filter_value=$(echo "$var" | cut -d'=' -f2-)
-
-        echo "Processing: filter_number=$filter_number, filter_name=$filter_name, filter_value=$filter_value"
-
-        case $filter_name in
-            title)
-                append_filter "$filter_number" "titleRegex" "$filter_value"
-                ;;
-            body)
-                append_filter "$filter_number" "bodyRegex" "$filter_value"
-                ;;
-            feed)
-                append_filter "$filter_number" "feedId" "$filter_value"
-                ;;
-            hours)
-                append_filter "$filter_number" "hoursAge" "$filter_value"
-                ;;
-            *)
-                echo "Warning: Unsupported filter name '$filter_name' for filter_number=$filter_number."
-                ;;
-        esac
+        filters+=("$var")
     fi
+done
+
+# Sort filters by filter_number
+IFS=$'\n' sorted_filters=($(sort -t'_' -k2,2n <<<"${filters[*]}"))
+unset IFS
+
+# Process sorted filters
+for var in "${sorted_filters[@]}"; do
+    filter_number=$(echo "$var" | cut -d'_' -f2)
+    filter_property=$(echo "$var" | cut -d'_' -f3)
+    filter_name=$(echo "$filter_property" | cut -d'=' -f1 | tr '[:upper:]' '[:lower:]') # Convert to lowercase
+    filter_value=$(echo "$var" | cut -d'=' -f2-)
+
+    echo "Processing: filter_number=$filter_number, filter_name=$filter_name, filter_value=$filter_value"
+
+    case $filter_name in
+        title)
+            append_filter "$filter_number" "titleRegex" "$filter_value"
+            ;;
+        body)
+            append_filter "$filter_number" "bodyRegex" "$filter_value"
+            ;;
+        feed)
+            append_filter "$filter_number" "feedId" "$filter_value"
+            ;;
+        hours)
+            append_filter "$filter_number" "hoursAge" "$filter_value"
+            ;;
+        *)
+            echo "Warning: Unsupported filter name '$filter_name' for filter_number=$filter_number."
+            ;;
+    esac
 done
